@@ -17,7 +17,7 @@ foreach ($search as $value) {
     $mp3ArtistTitle = getArtistTitleFromMP3($value);
     $mp3ArtistTitleConverted = convertArtistTitle($mp3ArtistTitle, "");
     $bpm = searchForBPM($mp3ArtistTitleConverted, $authorization);
-    writeBPMToFile($value, $bpm);
+    //writeBPMToFile($value, $bpm);
 }
 
 
@@ -46,10 +46,13 @@ function getArtistTitleFromMP3($file){
             ." "
             .$ThisFileInfo["tags"]["id3v2"]["title"][0];
     }
-    else{
+    else if(isset($ThisFileInfo["tags"]["id3v1"]["artist"][0])){
         $currentArtistTitle = $ThisFileInfo["tags"]["id3v1"]["artist"][0]
             ." "
             .$ThisFileInfo["tags"]["id3v1"]["title"][0];
+    }
+    else{
+        $currentArtistTitle = "";
     }
     
         
