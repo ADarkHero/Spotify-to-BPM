@@ -1,13 +1,8 @@
 <?php
-/*
- * Generates an access token
- */
-
-
 $authorization = "Authorization: Bearer ".getAccessToken();
 
 
-$search = readFromTextFile();
+$search = readFromTextFile("songs.csv");
 foreach ($search as $value) {
     searchForBPM($value, $authorization);
 }
@@ -57,15 +52,18 @@ function makeSpotifyCall($spotifyURL, $authorization){
 /*
  * Calls the spotify api and return a decoded json array
  */
-function readFromTextFile(){
+function readFromTextFile($filename){
     $searcharray = [];
     
-    //TODO: LOOP
-    $artist = 'Dragonforce';
-    $title = 'fire and the flames';
-    $search = convertArtistTitle($artist, $title);
-    array_push($searcharray, $search);    
-
+    //Opens file and loops through it line by line
+    $file = fopen($filename, 'r');
+    while (($line = fgetcsv($file, 1000, ";")) !== FALSE) {
+        $search = convertArtistTitle($line[0], $line[1]);
+        array_push($searcharray, $search);   
+    }
+    fclose($file);
+    
+     
     return $searcharray;
 }
 
